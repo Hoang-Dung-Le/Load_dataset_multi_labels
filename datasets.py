@@ -15,7 +15,7 @@ from torchvision import datasets, transforms
 
 from timm.data import create_transform
 from timm.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from util.dataloader_med import RetinaDataset, Augmentation, Node21, ChestX_ray14, Covidx, CheXpert
+from .dataloader_med import RetinaDataset, Augmentation, Node21, ChestX_ray14, Covidx, CheXpert
 from .custom_transforms import GaussianBlur
 import torch
 from .augment import new_data_aug_generator
@@ -26,7 +26,7 @@ def build_dataset(is_train, args):
     root = os.path.join(args.data_path, 'train' if is_train else 'val')
     dataset = datasets.ImageFolder(root, transform=transform)
 
-    print(dataset)
+    # print(dataset)
 
     return dataset
 
@@ -85,26 +85,26 @@ def build_dataset_chest_xray(split, args):
     return dataset
 
 
-def build_dataset_retina(split, args):
-    is_train = (split == 'train')
-    # transform = build_transform(is_train, args)
-    if args.build_timm_transform:
-        args.dataset = 'retina'
-        transform = build_transform(is_train, args)
-    else:
-        raise NotImplementedError
+# def build_dataset_retina(split, args):
+#     is_train = (split == 'train')
+#     # transform = build_transform(is_train, args)
+#     if args.build_timm_transform:
+#         args.dataset = 'retina'
+#         transform = build_transform(is_train, args)
+#     else:
+#         raise NotImplementedError
 
-    if args.dataset == 'retina':
-        data_list = getattr(args, f'{split}_list')
-        if is_train:
-            dataset = RetinaDataset(data_dir=args.data_path, file=data_list, transform=transform)
-        else:
-            dataset = RetinaDataset(data_dir=args.data_path_test, file=data_list, transform=transform)
-    else:
-        raise NotImplementedError
-    print(dataset)
+#     if args.dataset == 'retina':
+#         data_list = getattr(args, f'{split}_list')
+#         if is_train:
+#             dataset = RetinaDataset(data_dir=args.data_path, file=data_list, transform=transform)
+#         else:
+#             dataset = RetinaDataset(data_dir=args.data_path_test, file=data_list, transform=transform)
+#     else:
+#         raise NotImplementedError
+#     print(dataset)
 
-    return dataset
+#     return dataset
 
 
 def build_transform(is_train, args):
